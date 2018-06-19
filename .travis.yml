@@ -4,6 +4,7 @@ node_js:
   - "9"
 
 before_install:
+  - wget -qO- https://toolbelt.heroku.com/install.sh | sh
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
 
@@ -14,12 +15,13 @@ script:
   - yarn test
   - yarn build
   - yarn build:docker
-  - docker tag jfernades/todo-list-front registry.heroku.com/${HEROKU_APP_NAME}/web
+  - docker tag jfernandes/todo-list-front registry.heroku.com/${HEROKU_APP_NAME}/web
 
 deploy:
   provider: script
   script:
-    docker push jfernades/todo-list-front;
+    docker push jfernandes/todo-list-front;
     docker push registry.heroku.com/${HEROKU_APP_NAME}/web;
+    heroku container:release web --app $HEROKU_APP_NAME
   on:
     branch: en-clase
