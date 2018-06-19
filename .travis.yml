@@ -5,6 +5,7 @@ node_js:
 
 before_install:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
 
 install:
   - yarn install
@@ -13,10 +14,12 @@ script:
   - yarn test
   - yarn build
   - yarn build:docker
+  - docker tag jfernades/todo-list-front registry.heroku.com/${HEROKU_APP_NAME}/web
 
 deploy:
   provider: script
   script:
-    docker push unqpdes/todo-list-front;
+    docker push jfernades/todo-list-front;
+    docker push registry.heroku.com/${HEROKU_APP_NAME}/web;
   on:
     branch: en-clase
