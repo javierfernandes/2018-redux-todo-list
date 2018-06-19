@@ -18,4 +18,5 @@ deploy:
   provider: script
   script:
     docker push unqpdes/todo-list-front;
-  branch: en-clase
+  on:
+    branch: en-clase
