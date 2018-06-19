@@ -1,6 +1,10 @@
+sudo: required
 language: node_js
 node_js:
   - "9"
+
+before_install:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 install:
   - yarn install
@@ -8,3 +12,10 @@ install:
 script:
   - yarn test
   - yarn build
+  - yarn build:docker
+
+deploy:
+  provider: script
+  script:
+    docker push unqpdes/todo-list-front;
+  branch: master
